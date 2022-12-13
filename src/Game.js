@@ -1,6 +1,5 @@
 import "./Game.css";
-import React from "react";
-import ReactDOM from "react-dom/client";
+import React, { useState, useEffect } from "react";
 
 function Square(props) {
 	return (
@@ -10,41 +9,38 @@ function Square(props) {
 	);
 }
 
-class Board extends React.Component {
-	renderSquare(i) {
-		return (
-			<Square
-				classOfSquare={this.props.classOfSquare[i]}
-				value={this.props.squares[i]}
-				onClick={(e) => this.props.onClick(i)}
-			/>
-		);
-	}
+function Board(props) {
+	const numberOfRows = 3;
+	const numberOfColumns = 3;
+	//Using for loops
+	// const boardToRender = [];
+	// for (let i=0;i<numberOfRows;i++) {
+	//   const rowToRender = [];
+	//   for (let j=0;j<numberOfColumns;j++) {
+	//     rowToRender.push(this.renderSquare(numberOfRows*i+j));
+	//   }
+	//   boardToRender.push(<div className="board-row">{rowToRender}</div>);
+	// }
 
-	render() {
-		//Using for loops
-		const numberOfRows = 3;
-		const numberOfColumns = 3;
-		// const boardToRender = [];
-		// for (let i=0;i<numberOfRows;i++) {
-		//   const rowToRender = [];
-		//   for (let j=0;j<numberOfColumns;j++) {
-		//     rowToRender.push(this.renderSquare(numberOfRows*i+j));
-		//   }
-		//   boardToRender.push(<div className="board-row">{rowToRender}</div>);
-		// }
+	//Using map
+	const boardToRender = [...Array(numberOfRows).keys()].map((i) => (
+		<div className="board-row">
+			{[...Array(numberOfColumns).keys()].map((j) =>
+				renderSquare(props, 3 * i + j)
+			)}
+		</div>
+	));
+	return <div>{boardToRender}</div>;
+}
 
-		//Using map
-		const boardToRender = [...Array(numberOfRows).keys()].map((i) => (
-			<div className="board-row">
-				{[...Array(numberOfColumns).keys()].map((j) =>
-					this.renderSquare(3 * i + j)
-				)}
-			</div>
-		));
-
-		return <div>{boardToRender}</div>;
-	}
+function renderSquare(props, i) {
+	return (
+		<Square
+			classOfSquare={props.classOfSquare[i]}
+			value={props.squares[i]}
+			onClick={(e) => props.onClick(i)}
+		/>
+	);
 }
 
 class Game extends React.Component {
